@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PatternCraft Studio v2</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════════
+       HEADER / NAV
+  ══════════════════════════════════════════════════════════ -->
+  <header class="app-header">
+    <div class="header-left">
+      <div class="logo">
+        <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
+          <rect x="0" y="0" width="12" height="12" rx="2" fill="#F5C518"/>
+          <rect x="16" y="0" width="12" height="12" rx="2" fill="#F5C518" opacity="0.6"/>
+          <rect x="0" y="16" width="12" height="12" rx="2" fill="#F5C518" opacity="0.6"/>
+          <rect x="16" y="16" width="12" height="12" rx="2" fill="#F5C518"/>
+        </svg>
+        <span class="logo-text">PatternCraft <span>Studio</span></span>
+      </div>
+    </div>
+    <div class="header-center">
+      <div class="search-wrap">
+        <svg class="search-icon" viewBox="0 0 20 20" fill="none">
+          <circle cx="9" cy="9" r="5.5" stroke="#888" stroke-width="1.6"/>
+          <line x1="13" y1="13" x2="17" y2="17" stroke="#888" stroke-width="1.6" stroke-linecap="round"/>
+        </svg>
+        <input type="text" id="search-input" placeholder="Search patterns…" autocomplete="off" />
+        <button id="search-clear" class="search-clear" aria-label="Clear">✕</button>
+      </div>
+    </div>
+    <div class="header-right">
+      <span class="badge" id="count-badge">54 patterns</span>
+    </div>
+  </header>
+
+  <!-- ═══════════════════════════════════════════════════════
+       CATEGORY FILTER BAR
+  ══════════════════════════════════════════════════════════ -->
+  <nav class="filter-bar" id="filter-bar" role="tablist">
+    <button class="filter-tab active" data-cat="all">All</button>
+    <button class="filter-tab" data-cat="Geometric">Geometric</button>
+    <button class="filter-tab" data-cat="Lines">Lines</button>
+    <button class="filter-tab" data-cat="Abstract">Abstract</button>
+    <button class="filter-tab" data-cat="Organic">Organic</button>
+    <button class="filter-tab" data-cat="Minimal">Minimal</button>
+    <button class="filter-tab" data-cat="Tech">Tech</button>
+  </nav>
+
+  <!-- ═══════════════════════════════════════════════════════
+       GALLERY GRID
+  ══════════════════════════════════════════════════════════ -->
+  <main class="gallery-main" id="gallery-main">
+    <div class="gallery-grid" id="gallery-grid" role="list"></div>
+    <div class="empty-state hidden" id="empty-state">
+      <p>No patterns found.</p>
+    </div>
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════════
+       EDITOR MODAL  (Pattern Monster style)
+  ══════════════════════════════════════════════════════════ -->
+  <div class="editor-overlay" id="editor-overlay" aria-modal="true" role="dialog" aria-label="Pattern editor">
+
+    <div class="editor-shell">
+
+      <!-- ── Close ── -->
+      <button class="editor-close" id="editor-close" aria-label="Close editor">✕</button>
+
+      <!-- ── Left Panel: Controls ── -->
+      <aside class="editor-panel" id="editor-panel">
+
+        <h2 class="editor-title" id="editor-title">Pattern Name</h2>
+
+        <!-- ZOOM -->
+        <div class="ctrl-row">
+          <div class="ctrl-label-wrap">
+            <span class="ctrl-icon">⊞</span>
+            <span class="ctrl-label">Zoom</span>
+          </div>
+          <div class="ctrl-slider-wrap">
+            <input type="range" id="ctrl-zoom" class="studio-slider" min="10" max="400" value="100" step="5" />
+            <span class="ctrl-value" id="val-zoom">100</span>
+          </div>
+        </div>
+
+        <!-- STROKE / WEIGHT -->
+        <div class="ctrl-row">
+          <div class="ctrl-label-wrap">
+            <span class="ctrl-icon">⊞</span>
+            <span class="ctrl-label">Stroke</span>
+          </div>
+          <div class="ctrl-slider-wrap">
+            <input type="range" id="ctrl-stroke" class="studio-slider" min="0.2" max="12" value="1.5" step="0.1" />
+            <span class="ctrl-value" id="val-stroke">1.5</span>
+          </div>
+        </div>
+
+        <!-- HORIZONTAL POSITION -->
+        <div class="ctrl-row">
+          <div class="ctrl-label-wrap">
+            <span class="ctrl-icon">⊞</span>
+            <span class="ctrl-label">Horizontal Position</span>
+          </div>
+          <div class="ctrl-slider-wrap">
+            <input type="range" id="ctrl-x" class="studio-slider" min="-100" max="100" value="0" step="1" />
+            <span class="ctrl-value" id="val-x">0</span>
+          </div>
+        </div>
+
+        <!-- VERTICAL POSITION -->
+        <div class="ctrl-row">
+          <div class="ctrl-label-wrap">
+            <span class="ctrl-icon">⊞</span>
+            <span class="ctrl-label">Vertical Position</span>
+          </div>
+          <div class="ctrl-slider-wrap">
+            <input type="range" id="ctrl-y" class="studio-slider" min="-100" max="100" value="0" step="1" />
+            <span class="ctrl-value" id="val-y">0</span>
+          </div>
+        </div>
+
+        <!-- SPACING -->
+        <div class="ctrl-row">
+          <div class="ctrl-label-wrap">
+            <span class="ctrl-icon">⊞</span>
+            <span class="ctrl-label">Spacing</span>
+          </div>
+          <div class="ctrl-slider-wrap">
+            <input type="range" id="ctrl-spacing" class="studio-slider" min="0" max="60" value="0" step="1" />
+            <span class="ctrl-value" id="val-spacing">0</span>
+          </div>
+        </div>
+
+        <!-- ANGLE -->
+        <div class="ctrl-row">
+          <div class="ctrl-label-wrap">
+            <span class="ctrl-icon">⊞</span>
+            <span class="ctrl-label">Angle</span>
+          </div>
+          <div class="ctrl-slider-wrap">
+            <input type="range" id="ctrl-angle" class="studio-slider" min="0" max="360" value="0" step="1" />
+            <span class="ctrl-value" id="val-angle">0</span>
+          </div>
+        </div>
+
+        <!-- COLOR SECTION -->
+        <div class="color-section">
+          <div class="color-row">
+            <label class="color-item">
+              <span class="color-label">Background</span>
+              <input type="color" id="ctrl-bg" value="#1a1a2e" class="color-swatch" />
+            </label>
+            <label class="color-item">
+              <span class="color-label">Pattern</span>
+              <input type="color" id="ctrl-fg" value="#F5C518" class="color-swatch" />
+            </label>
+            <label class="color-item">
+              <span class="color-label">Accent</span>
+              <input type="color" id="ctrl-accent" value="#E63946" class="color-swatch" />
+            </label>
+          </div>
+        </div>
+
+        <!-- RESET -->
+        <button class="btn-reset" id="btn-reset">↺ Reset Defaults</button>
+
+      </aside>
+
+      <!-- ── Right: Live Preview ── -->
+      <section class="editor-preview" id="editor-preview">
+        <div class="preview-canvas" id="preview-canvas"></div>
+      </section>
+
+    </div>
+
+    <!-- ── Bottom Export Bar ── -->
+    <footer class="export-bar">
+      <span class="export-label">Copy</span>
+      <button class="export-btn export-btn--yellow" id="btn-copy-css">CSS</button>
+      <button class="export-btn export-btn--yellow" id="btn-copy-svg">SVG</button>
+
+      <span class="export-sep"></span>
+
+      <span class="export-label">Download</span>
+      <button class="export-btn export-btn--yellow" id="btn-dl-svg">SVG</button>
+      <button class="export-btn export-btn--yellow" id="btn-dl-png">PNG</button>
+
+      <span class="export-sep"></span>
+
+      <span class="export-label">Dimensions</span>
+      <input type="number" id="dim-w" class="dim-input" value="1080" min="100" max="4096" step="10" />
+      <span class="export-label">×</span>
+      <input type="number" id="dim-h" class="dim-input" value="1080" min="100" max="4096" step="10" />
+    </footer>
+
+  </div><!-- /editor-overlay -->
+
+  <!-- ═══════════════════════════════════════════════════════
+       TOAST
+  ══════════════════════════════════════════════════════════ -->
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
